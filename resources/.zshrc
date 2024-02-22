@@ -105,4 +105,7 @@ alias tree="exa --tree"
 
 # Aliases fo BAT instead of cat
 alias cat="bat"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
+
+# Alias for vim
+alias vi="nvim"
+alias vim="nvim"

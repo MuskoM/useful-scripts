@@ -2,13 +2,7 @@
 sudo -v
 # Get variables used later 
 DISTRO=$(lsb_release -is)
-export RESOURCES=${HOME}/nvi0_script_resources
-
-# Create resource folder for installation
-mkdir $RESOURCES
-cp -rf resources ${RESOURCES}
-
-cd $HOME
+export RESOURCES=$(pwd)/resources
 
 # Distro dependent configuration
 # ==============================
@@ -33,7 +27,7 @@ case $DISTRO in
 
 		# Install Zellij Terminal Multiplexer
 		wget -P $HOME https://github.com/zellij-org/zellij/releases/download/v0.39.2/zellij-x86_64-unknown-linux-musl.tar.gz && tar -C $HOME -xf "${HOME}/zellij-x86_64-unknown-linux-musl.tar.gz"
-		rm ${HOME}zellij-x86_64-unknown-linux-musl*
+		rm ${HOME}/zellij-x86_64-unknown-linux-musl*
 
 		mkdir -p "${HOME}/.local/bin"
 		cp "${HOME}/zellij" "${HOME}/.local/bin/zellij"
@@ -61,18 +55,15 @@ esac
 # =================================
 
 # Make .config directories for config files
-mkdir -p .config
-
+mkdir -p $HOME/.config
+sudo chmod 777 setup-nvim.sh
 ./setup-nvim.sh
 
 # Make local bin directory and add to path
-mkdir -p .local/bin
+mkdir -p $HOME/.local/bin
 
 # Install Oh my zsh
 sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
 
 # Replace basic .zshrc with customized
-cp ${RESOURCES}/resources/.zshrc $HOME/.zshrc
-
-# Cleanup script resource folder
-rm -rf $RESOURCES
+cp ${RESOURCES}/.zshrc $HOME/.zshrc
