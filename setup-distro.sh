@@ -4,6 +4,11 @@ sudo -v
 DISTRO=$(lsb_release -is)
 USER=$(whoami)
 USERDIR=/home/$USER/
+RESOURCES=${USERDIR}nvi0_script_resources/
+
+# Create resource folder for installation
+mkdir $RESOURCES
+cp -rf resources ${RESOURCES}
 
 cd $USERDIR
 
@@ -40,6 +45,13 @@ case $DISTRO in
 		apt install zsh
 		echo $(zsh --version)
 		sudo chsh -s $(which zsh)
+
+		# Install exa - better ls
+		sudo apt install exa
+		
+		# Install bat - better cat
+		sudo apt install bat
+		
 		;;
 	*)
 		echo "Not acceptable"
@@ -53,9 +65,15 @@ esac
 # Make .config directories for config files
 mkdir -p .config/nvim
 
-# Make local bin directory
+# Make local bin directory and add to path
 mkdir -p .local/bin
-
+echo "PATH=$PATH:${USERDIR}.local/bin" >> $USERDIR.zshrc
 
 # Install Oh my zsh
 sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
+
+# Replace basic .zshrc with customized
+cp ${RESOURCES}resources/.zshrc $USERDIR.zshrc
+
+# Cleanup script resource folder
+rm -rf $RESOURCES
