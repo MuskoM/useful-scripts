@@ -63,11 +63,10 @@ esac
 # =================================
 
 # Make .config directories for config files
-mkdir -p .config/nvim
+mkdir -p .config
 
 # Make local bin directory and add to path
 mkdir -p .local/bin
-echo "PATH=$PATH:${USERDIR}.local/bin" >> $USERDIR.zshrc
 
 # Install Oh my zsh
 sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
