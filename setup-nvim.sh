@@ -1,0 +1,8 @@
+cd $HOME
+
+NVIM_CONFIG_SCR=$RESOURCES/nvim
+NVIM_DIR=$HOME/.convig/nvim
+
+mkdir $NVIM_DIR
+
+cp -r $NVIM_CONFIG_SRC $NVIM_DIR

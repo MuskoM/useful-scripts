@@ -2,15 +2,13 @@
 sudo -v
 # Get variables used later 
 DISTRO=$(lsb_release -is)
-USER=$(whoami)
-USERDIR=/home/$USER/
-RESOURCES=${USERDIR}nvi0_script_resources/
+export RESOURCES=${HOME}/nvi0_script_resources
 
 # Create resource folder for installation
 mkdir $RESOURCES
 cp -rf resources ${RESOURCES}
 
-cd $USERDIR
+cd $HOME
 
 # Distro dependent configuration
 # ==============================
@@ -29,17 +27,17 @@ case $DISTRO in
 		# Installs add apt-repository
 		sudo apt-get install software-properties-common
 
-		# Add Neovim Repostiory
+		# Add Neovim Repostiory and install
 		sudo add-apt-repository ppa:neovim-ppa/unstable
 		sudo apt install neovim
 
 		# Install Zellij Terminal Multiplexer
-		wget -P $USERDIR https://github.com/zellij-org/zellij/releases/download/v0.39.2/zellij-x86_64-unknown-linux-musl.tar.gz && tar -C $USERDIR -xf "${USERDIR}zellij-x86_64-unknown-linux-musl.tar.gz"
-		rm ${USERDIR}zellij-x86_64-unknown-linux-musl*
+		wget -P $HOME https://github.com/zellij-org/zellij/releases/download/v0.39.2/zellij-x86_64-unknown-linux-musl.tar.gz && tar -C $HOME -xf "${HOME}/zellij-x86_64-unknown-linux-musl.tar.gz"
+		rm ${HOME}zellij-x86_64-unknown-linux-musl*
 
-		mkdir -p "${USERDIR}.local/bin"
-		cp "${USERDIR}zellij" "${USERDIR}.local/bin/zellij"
-		rm "${USERDIR}zellij"
+		mkdir -p "${HOME}/.local/bin"
+		cp "${HOME}/zellij" "${HOME}/.local/bin/zellij"
+		rm "${HOME}/zellij"
 
 		# Install Z Shell
 		apt install zsh
@@ -65,6 +63,8 @@ esac
 # Make .config directories for config files
 mkdir -p .config
 
+./setup-nvim.sh
+
 # Make local bin directory and add to path
 mkdir -p .local/bin
 
@@ -72,7 +72,7 @@ mkdir -p .local/bin
 sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
 
 # Replace basic .zshrc with customized
-cp ${RESOURCES}resources/.zshrc $USERDIR.zshrc
+cp ${RESOURCES}/resources/.zshrc $HOME/.zshrc
 
 # Cleanup script resource folder
 rm -rf $RESOURCES
