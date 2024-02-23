@@ -6,9 +6,6 @@ local plugins = {
 	"williamboman/mason.nvim",
 	"williamboman/mason-lspconfig.nvim",
 	"neovim/nvim-lspconfig",
-	{"ms-jpq/coq_nvim", branch="coq"},
-	{"ms-jpq/coq.artifacts", branch="artifacts"},
-	{"ms-jpq/coq.thirdparty", branch="3p"},
 }
 
 require("lazy").setup(plugins)
@@ -48,9 +45,5 @@ require("mason-lspconfig").setup({
 })
 local lspconfig = require('lspconfig')
 
-vim.g.coq_settings = {auto_start = 'shut-up'}
-
-for _, lsp in ipairs(servers) do
-	lspconfig[lsp].setup(require("coq").lsp_ensure_capabilities({}))
-end
-
+lspconfig.lua_ls.setup {}
+lspconfig.pyright.setup {}
