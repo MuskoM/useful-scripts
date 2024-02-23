@@ -46,6 +46,9 @@ case $DISTRO in
 		
 		# Install bat - better cat
 		sudo apt install bat
+
+		# Install python3 venv
+		sudo apt install python3-venv
 		
 		;;
 	*)
@@ -59,8 +62,14 @@ esac
 
 # Make .config directories for config files
 mkdir -p $HOME/.config
+
+# Setup Nvim config
 sudo chmod 777 setup-nvim.sh
 ./setup-nvim.sh
+
+# Setup Zellij config
+sudo chmod 777 setup-zellij.sh
+./setup-zellij.sh
 
 # Make local bin directory and add to path
 mkdir -p $HOME/.local/bin
