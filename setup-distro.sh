@@ -25,6 +25,9 @@ case $DISTRO in
 		sudo add-apt-repository ppa:neovim-ppa/unstable
 		sudo apt install neovim
 
+		# Install ripgrep
+		sudo apt install ripgrep
+
 		# Install Zellij Terminal Multiplexer
 		wget -P $HOME https://github.com/zellij-org/zellij/releases/download/v0.39.2/zellij-x86_64-unknown-linux-musl.tar.gz && tar -C $HOME -xf "${HOME}/zellij-x86_64-unknown-linux-musl.tar.gz"
 		rm ${HOME}/zellij-x86_64-unknown-linux-musl*
