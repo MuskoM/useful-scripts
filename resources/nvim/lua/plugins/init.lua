@@ -8,7 +8,16 @@ local plugins = {
     -- Catpuccin theme
 	{"catppuccin/nvim", name = "catppuccin", priority = 1000 },
     -- Mason
-	"williamboman/mason.nvim",
+	{
+        "williamboman/mason.nvim",
+        opts = {
+            ensure_installed = {
+                "mypy",
+                "debugpy",
+                "pyright",
+            }
+        }
+    },
 	"williamboman/mason-lspconfig.nvim",
     -- Lspconfig + cmp-nvim
 	"neovim/nvim-lspconfig",
@@ -26,7 +35,60 @@ local plugins = {
         'windwp/nvim-autopairs',
         event = "InsertEnter",
         config = true
+    },
+    {
+        "nvimtools/none-ls.nvim",
+        ft = {"python"},
+        opts = function ()
+            require 'plugins.configs.none-ls'
+        end
+    },
+    {
+        "mfussenegger/nvim-dap",
+        config = function (_, opts)
+            vim.keymap.set('n','<leader>db', '<cmd> DapToggleBreakpoint <CR>')
+            vim.keymap.set('n','<leader>dc', function ()
+                require('dap').continue()
+            end)
+            vim.keymap.set('n','<leader>ds', '<cmd> DapStepOver <CR>')
+            vim.keymap.set('n','<leader>di', '<cmd> DapStepInto <CR>')
+            vim.keymap.set('n','<leader>do', '<cmd> DapStepOut <CR>')
+        end
+    },
+    {
+        "mfussenegger/nvim-dap-python",
+        ft = "python",
+        dependencies = {
+            "mfussenegger/nvim-dap",
+            "rcarriga/nvim-dap-ui"
+        },
+        config = function(_, opts)
+            local path = "~/.local/share/nvim/mason/packages/debugpy/venv/bin/python"
+            require("dap-python").setup(path)
+            vim.keymap.set('n','<leader>dtm',function ()
+                require('dap-python').test_method()
+            end)
+        end
+    },
+    {
+        "rcarriga/nvim-dap-ui",
+        dependencies = "mfussenegger/nvim-dap",
+        config = function ()
+            local dap = require("dap")
+            local dapui = require("dapui")
+            dapui.setup()
+            dap.listeners.after.event_initialized["dapui_config"] = function ()
+                dapui.open()
+            end
+            dap.listeners.before.event_terminated["dapui_config"] = function ()
+                dapui.close()
+            end
+            dap.listeners.before.event_exited["dapui_config"] = function ()
+                dapui.close()
+            end
+        end
     }
+
 }
 
 require("lazy").setup(plugins)
@@ -94,7 +156,9 @@ lspconfig.lua_ls.setup {
     return true
 end
 }
-lspconfig.pyright.setup {}
+lspconfig.pyright.setup {
+    filetypes = {"python"}
+}
 
 
 -- function for supertab
