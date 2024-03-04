@@ -3,17 +3,27 @@ local lsp = require 'lsp-zero'
 lsp.preset('recommended')
 
 lsp.on_attach(function(client, bufnr)
-    local opts = {buffer = bufnr, remap = false}
-    vim.keymap.set('n', 'gd', function () vim.lsp.buf.definition() end, opts)
-    vim.keymap.set('n', 'K', function () vim.lsp.buf.hover() end, opts)
-    vim.keymap.set('n', '<leader>vws', function () vim.lsp.buf.workspace_symbol() end, opts)
-    vim.keymap.set('n', '<leader>vd', function () vim.diagnostic.open_float() end, opts)
-    vim.keymap.set('n', ']d', function () vim.diagnostic.goto_next() end, opts)
-    vim.keymap.set('n', '[d', function () vim.diagnostic.goto_prev() end, opts)
-    vim.keymap.set('n', '<leader>vca', function () vim.lsp.buf.code_action() end, opts)
-    vim.keymap.set('n', '<leader>vrr', function () vim.lsp.buf.references() end, opts)
-    vim.keymap.set('n', '<leader>vrn', function () vim.lsp.buf.rename() end, opts)
-    vim.keymap.set('i', '<C-h>', function () vim.lsp.buf.signature_help() end, opts)
+    local map = function (keys, func, desc)
+        vim.keymap.set('n', keys, func, {buffer = bufnr, remap = false, desc = 'LSP: ' .. desc})
+    end
+
+    local builtin = require 'telescope.builtin'
+
+    map('gd', builtin.lsp_definitions, '[G]oto [D]efinition')
+    map('gr', builtin.lsp_references, '[G]oto [R]eferences')
+    map('gl', builtin.lsp_implementations, '[G]oto [I]mplementation')
+    map('gtd', builtin.lsp_type_definitions, '[G]oto [T]ype [D]efinition')
+    map('gsd', builtin.lsp_document_symbols, '[G]oto [S]ymbols in [D]ocument ')
+    map('gsw', builtin.lsp_dynamic_workspace_symbols, '[G]oto [S]ymbols in [W]orkspace ')
+    map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
+    map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
+    map('K', vim.lsp.buf.hover, 'Hover Documentation')
+    map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+    map('<leader>vd', vim.diagnostic.open_float, '[V]iew [D]iagnostics')
+    vim.keymap.set('i', '<C-h>', vim.lsp.buf.signature_help, {buffer = bufnr, remap = false})
+
+    -- vim.keymap.set('n', ']d', function () vim.diagnostic.goto_next() end, opts)
+    -- vim.keymap.set('n', '[d', function () vim.diagnostic.goto_prev() end, opts)
 end
 )
 
