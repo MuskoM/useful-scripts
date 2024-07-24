@@ -1,10 +1,3 @@
-cd $HOME
-
-NVIM_CONFIG_SRC=$RESOURCES/nvim/*
-NVIM_DIR=$HOME/.config/nvim
-
-mkdir $NVIM_DIR
-
-cp -r $NVIM_CONFIG_SRC $NVIM_DIR
+git clone https://github.com/MuskoM/kickstart.nvim.git "${XDG_CONFIG_HOME:-$HOME/.config}"/nvim
 
 echo alias vi="nvim" >> $HOME/.zshrc
