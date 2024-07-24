@@ -6,7 +6,7 @@ RED='\033[0;31m'
 NC='\033[0m' # No Color
 
 # Default packages
-default_packages=("git" "unzip" "gcc")
+default_packages=("git" "unzip" "gcc" "zsh" "fzf")
 packages=()
 
 # Parse command line options
