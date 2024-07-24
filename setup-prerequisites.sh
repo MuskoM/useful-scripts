@@ -6,7 +6,7 @@ RED='\033[0;31m'
 NC='\033[0m' # No Color
 
 # Default packages
-default_packages=("git" "unzip" "gcc" "zsh" "fzf")
+default_packages=("git" "unzip" "gcc" "zsh" "fzf" "bat" "exa" "duf" "tmux" "neovim")
 packages=()
 
 # Parse command line options
@@ -51,6 +51,16 @@ sudo -v || { echo -e "${RED}Failed to get sudo privileges. Exiting.${NC}"; exit 
 
 case $OS in
     "Ubuntu"|"Debian")
+        # Update repositories
+        ## Setup nightly neovim version
+        sudo apt-get install software-properties-common
+        sudo add-apt-repository ppa:neovim-ppa/unstable
+        echo -e "${GREEN}Updating repositories...${NC}"
+        sudo apt-get update
+        echo -e "${GREEN}Upgrading packages...${NC}"
+        sudo apt-get upgrade -y
+
+        # Download packages
         for pkg in "${packages[@]}"; do
             if ! dpkg -s "$pkg" >/dev/null 2>&1; then
                 echo -e "Installing ${GREEN}$pkg${NC}"
@@ -61,6 +71,11 @@ case $OS in
         done
         ;;
     "Fedora"|"CentOS")
+        # Update repositories
+        echo -e "${GREEN}Updating repositories and upgrading packages...${NC}"
+        sudo dnf upgrade -y
+
+        # Download packages
         for pkg in "${packages[@]}"; do
             if ! rpm -q "$pkg" >/dev/null 2>&1; then
                 echo -e "Installing ${GREEN}$pkg${NC}"
@@ -71,6 +86,11 @@ case $OS in
         done
         ;;
     "Arch Linux")
+        # Update repositories
+        echo -e "${GREEN}Updating repositories and upgrading packages...${NC}"
+        sudo pacman -Syu --noconfirm
+
+        # Download packages
         for pkg in "${packages[@]}"; do
             if ! pacman -Qi "$pkg" >/dev/null 2>&1; then
                 echo -e "Installing ${GREEN}$pkg${NC}"
@@ -85,3 +105,9 @@ case $OS in
         exit 1
         ;;
 esac
+
+# Install rust
+curl https://sh.rustup.rs -sSf | sh
+. "$HOME/.cargo/env"
+
+

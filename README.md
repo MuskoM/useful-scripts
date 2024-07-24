@@ -47,6 +47,11 @@ The script comes with a set of default packages:
 - gcc
 - zsh
 - fzf
+- bat
+- exa
+- duf
+- tmux
+- neovim
 
 You can modify these in the script by changing the `default_packages` array.
 
